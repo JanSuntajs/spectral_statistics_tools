@@ -5,7 +5,8 @@ ratios of consecutive level spacings.
 """
 
 import numpy as np
-from utils import tester_methods as _tst
+
+from ..utils import tester_methods as _tst
 
 
 def _calc_gaps(spectrum, spectral_width=(0.25, 0.75)):

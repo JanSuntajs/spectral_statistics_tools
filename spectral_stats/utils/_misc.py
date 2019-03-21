@@ -33,13 +33,76 @@ A subclass needs to the following attributes:
 """
 
 import numpy as np
-# from utils import tester_methods as _tst
-# from utils._checking_routines import checker_mixin
-from utils._unfolding import Unfold_mixin
-from utils import filter_functions as _fif
+
+from ._unfolding import Unfold_mixin
+from . import filter_functions as _fif
 
 
 class Misc_mixin(Unfold_mixin):
+
+    @staticmethod
+    def _ham_misc(spectra, individual=False, flatten=False):
+        """
+        A helper routine for calculating:
+
+        - Mean energy (trace of the Hamiltonian)
+        - Square of the mean energy (square of the Hamiltonian's trace)
+        - Trace of the Hamiltonian squared
+        - the effective width of the Hamiltonian spectrum which we denote
+        Gamma:
+          Gamma ** 2 = tr(ham**2/dims) - (tr(ham/dims))**2
+        NOTE: the reason we make the above distinctions lies in the need for
+        averaging the values over the ensemble of similar Hamiltonians.
+
+        Parameters
+        ----------
+
+        spectra: ndarray
+                    A 2D ndarray of energy spectra
+        individual: boolean
+                    Whether to perform calculation on each spectrum
+                    individually or to perform it on all spectra at
+                    once and return the mean value
+        flatten: boolean
+                    if individual is true, return a scalar value
+                    instead of a vector of quantities for each
+                    individual spectrum
+        Returns
+        -------
+        misc_dict: dict
+                    A dictionary of the above quantities.
+        """
+
+        dict_keys = ['mean_ener', 'sq_ham_tr', 'ham_tr_sq', 'gamma']
+        misc_dict = {}
+
+        mean_ener = np.mean(spectra, axis=1)
+        # Square of the Hamiltonian's trace: tr(ham / dims) ** 2
+        # we use this definition since we are ultimately interested in the
+        # average value of gamma for the whole ensemble of spectra. Hence
+        # this definition enables us to first calculate gamma for each spectrum
+        # separately and then average those values.
+        sq_ham_tr = np.mean(spectra, axis=1) ** 2
+        # Trace of the squared Hamiltonian: tr(ham ** 2 / dims)
+        ham_tr_sq = np.mean(spectra**2, axis=1)
+        # Gamma
+        gamma = np.sqrt(ham_tr_sq - sq_ham_tr)
+
+        quantities = [mean_ener, sq_ham_tr, ham_tr_sq, gamma]
+
+        if not individual:
+            # keep the shape of the output arrays after mean has been performed
+            quantities = [np.full(spectra.shape[0], np.mean(quantity), )
+                          for quantity in quantities]
+        else:
+            if flatten:
+                quantities = [np.mean(quantity)
+                              for quantity in quantities]
+
+        for i, key in enumerate(dict_keys):
+            misc_dict[key] = quantities[i]
+
+        return misc_dict
 
     def get_ham_misc(self, individual=False):
         """
@@ -93,32 +156,8 @@ class Misc_mixin(Unfold_mixin):
 
         """
 
-        dict_keys = ['mean_ener', 'sq_ham_tr', 'ham_tr_sq', 'gamma']
-        misc_dict = {}
-
-        # First, calculate the quantities on each individual spectrum
-        # Mean energy
-        mean_ener = np.mean(self.spectrum, axis=1)
-        # Square of the Hamiltonian's trace: tr(ham / dims) ** 2
-        # we use this definition since we are ultimately interested in the
-        # average value of gamma for the whole ensemble of spectra. Hence
-        # this definition enables us to first calculate gamma for each spectrum
-        # separately and then average those values.
-        sq_ham_tr = np.mean(self.spectrum, axis=1) ** 2
-        # Trace of the squared Hamiltonian: tr(ham ** 2 / dims)
-        ham_tr_sq = np.mean(self.spectrum**2, axis=1)
-        # Gamma
-        gamma = np.sqrt(ham_tr_sq - sq_ham_tr)
-
-        quantities = [mean_ener, sq_ham_tr, ham_tr_sq, gamma]
-
-        if not individual:
-            # keep the shape of the output arrays after mean has been performed
-            quantities = [np.full(self.nsamples, np.mean(quantity), )
-                          for quantity in quantities]
-
-        for i, key in enumerate(dict_keys):
-            misc_dict[key] = quantities[i]
+        misc_dict = self._ham_misc(self.spectrum,
+                                   individual)
 
         misc_dict['unfolded'] = self._unfolding_performed
         misc_dict['individual'] = individual

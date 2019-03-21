@@ -1,6 +1,6 @@
-
-from sff import _sff_functions as _sff
 import numpy as _np
+
+from . import _sff_functions as _sff
 
 
 class Sff_mixin(object):

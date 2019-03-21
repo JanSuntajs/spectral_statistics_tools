@@ -9,10 +9,11 @@ to be diminished.
 
 
 """
+import warnings as _warnings
 
 import numpy as np
-from utils import tester_methods as _tst
-import warnings as _warnings
+
+from . import tester_methods as _tst
 
 
 class Unfold_mixin(object):

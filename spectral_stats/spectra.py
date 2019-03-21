@@ -1,13 +1,42 @@
+"""
+This module implements the Spectra class which implements
+methods for calculations of various spectral statistical
+observables which one typically encounters in studies of
+the energy spectra of ergodic or many-body localized
+systems. The expected use case is an analysis of an
+ensemble of energy spectra of many-body Hamiltonians, which
+were obtained by means of some external method/program,
+using for instance the approaches of full or partial
+diagonalization.
+
+The Spectra class contains methods which allow for
+calculations of:
+
+- mean ratio of the adjacent energy level spacings
+- spectral unfolding
+- miscellaneous quantities, such as:
+      - Hamiltonian's trace
+      - trace of the squared Hamiltonia
+      - Hamiltonian's mean energy
+      - energy spectra's gamma values
+- spectral form factor
+- spectral filtering used in spectral-form factor
+  calculations
+
+TO DO: COMPLETE THE DOCUMENTATION; AT THIS STAGE,
+IT IS INCONSISTENT AND INCOMPLETE
+
+"""
 
 from collections import defaultdict
 
-# from nearest_levels import _gap_ratios as _gr
-from nearest_levels._gap_ratios import Gap_mixin
-from utils._unfolding import Unfold_mixin
-from utils._misc import Misc_mixin
-from sff._sff import Sff_mixin
-from utils import tester_methods as _tst
 import numpy as _np
+
+from .nearest_levels._gap_ratios import Gap_mixin
+from .utils._unfolding import Unfold_mixin
+from .utils._misc import Misc_mixin
+from .sff._sff import Sff_mixin
+from .utils import tester_methods as _tst
 
 
 def _makehash():
@@ -33,17 +62,17 @@ class Spectra(Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
     Attributes
     ----------
 
-    _spectrum: ndarray
+    _spectrum0: ndarray
                 A 2D ndarray that stores the original ensemble of spectra
                 before any operations have been performed on them.
     spectrum: ndarray
                 A 2D ndarray that stores the "working version" of the
                 spectrum, on which unfolding or spectral resizing (or both)
                 have been performed.
-    nener: int
+    _nener: int
                 The number of energies (the Hilbert space dimension) in the
                 original spectra. _spectrum.shape[1]
-    nsamples: int
+    _nsamples: int
                 The number of individual spectra that are stored in the
                 spectrum array. _spectrum.shape[0]
 
@@ -58,6 +87,7 @@ class Spectra(Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
                 spectrum_resized = self.spectrum[:,
                                                   int(low * self.nener):
                                                   int(up * self.nener)]
+
     _unfolded_performed: boolean
                 Tells whether unfolding was performed or not. Initializes
                 to False.
@@ -65,10 +95,12 @@ class Spectra(Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
     _misc_calculated: boolean
                 Tells whether misc quantities were already calculated for
                 a given spectrum and spectral width
+
     _filtering_performed: boolean
                 Tells whether spectral filtering has already been performed
                 for a given spectrum, spectral width and misc quantities
-    unfolded: {None, dict}
+
+    unfold_dict: {None, dict}
                 A dict containing the unfolded spectrum and data
                 about the unfolding procedure. If None, the
                 unfolding procedure has not been called yet.
@@ -135,6 +167,19 @@ class Spectra(Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
         spectrum = _tst._check_spectral_dimensions(spectrum, 2)
 
         self.__spectrum0 = spectrum
+
+    @property
+    def misc0_dict(self):
+        """
+        Return dict with miscellanea
+        quantities for the original spectrum.
+
+        Average values of the quantities for
+        the whole ensemble are returned in a
+        flattened  form.
+        """
+
+        return self._ham_misc(self._spectrum0, False, True)
 
     @property
     def spectrum(self):

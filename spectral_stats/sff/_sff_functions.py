@@ -13,7 +13,8 @@ curve for normalized SFF in the GOE case.
 
 import numpy as np
 import numba as nb
-from utils import helper_functions as hlp
+
+from ..utils import helper_functions as hlp
 
 #  sff functions
 

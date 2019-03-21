@@ -17,11 +17,11 @@ spectra: ndarray
 positional and keyword arguments.
 
 """
+import functools
 
 import numpy as _np
-# import decorators as _dec
-from utils import tester_methods as _tst
-import functools
+
+from . import tester_methods as _tst
 
 
 def check_dims(func):
@@ -63,7 +63,7 @@ def __identity(spectra, *args, **kwargs):
 
 
 @check_dims
-def __gaussian_filter(spectra, misc_dict, eta = 1., *args, **kwargs):
+def __gaussian_filter(spectra, misc_dict, eta=1., *args, **kwargs):
     """
     Apply Gaussian filtering to the
     spectrum.
