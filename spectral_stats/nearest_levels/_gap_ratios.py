@@ -5,8 +5,20 @@ ratios of consecutive level spacings.
 """
 
 import numpy as np
+import numba as nb
 
 from ..utils import tester_methods as _tst
+
+
+# use numba for speed
+@nb.njit('float64[:](float64[:])', fastmath=True, parallel=True)
+def _gaps_numba(gaps):
+    ratios = np.ones(shape=len(gaps) - 1, dtype=np.float64)
+    for i in nb.prange(len(gaps[:-1])):
+        pair = gaps[i:i + 2]
+        ratios[i] = np.min(pair) / np.max(pair)
+
+    return ratios
 
 
 def _calc_gaps(spectrum, spectral_width=(0.25, 0.75)):
@@ -82,11 +94,12 @@ def _calc_gaps(spectrum, spectral_width=(0.25, 0.75)):
     if any(gaps == 0.):
         raise ValueError('Degeneracies are present in the spectrum!')
 
-    ratios = np.ones(len(gaps) - 1, dtype=np.float)
+    # ratios = np.ones(len(gaps) - 1, dtype=np.float)
 
-    for i, gap in enumerate(gaps[:-1]):
-        pair = (gaps[i], gaps[i + 1])
-        ratios[i] = min(pair) / max(pair)
+    # for i, gap in enumerate(gaps[:-1]):
+    #     pair = (gaps[i], gaps[i + 1])
+    #     ratios[i] = min(pair) / max(pair)
+    ratios = _gaps_numba(gaps)
 
     avg_ratio = np.mean(ratios)
     return ratios, avg_ratio

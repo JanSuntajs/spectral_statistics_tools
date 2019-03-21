@@ -31,6 +31,7 @@ A subclass needs to the following attributes:
                                                   int(up * self.nener)]
 
 """
+from future.utils import iteritems
 
 import numpy as np
 
@@ -91,12 +92,12 @@ class Misc_mixin(Unfold_mixin):
         quantities = [mean_ener, sq_ham_tr, ham_tr_sq, gamma]
 
         if not individual:
-            # keep the shape of the output arrays after mean has been performed
-            quantities = [np.full(spectra.shape[0], np.mean(quantity), )
-                          for quantity in quantities]
-        else:
+
             if flatten:
                 quantities = [np.mean(quantity)
+                              for quantity in quantities]
+            else:
+                quantities = [np.full(spectra.shape[0], np.mean(quantity), )
                               for quantity in quantities]
 
         for i, key in enumerate(dict_keys):
@@ -329,6 +330,10 @@ class Misc_mixin(Unfold_mixin):
         filt_dict['unfolded'] = self._unfolding_performed
         filt_dict['type'] = filter_key
         filt_dict['spectral_width'] = self.spectral_width
+
+        # additional dict entries parsed from kwargs dict
+        for (key, value) in iteritems(kwargs):
+            filt_dict[key] = value
 
         self._filtering_performed = True
         self._filt_dict = filt_dict
