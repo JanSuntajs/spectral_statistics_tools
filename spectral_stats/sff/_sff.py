@@ -21,4 +21,7 @@ class Sff_mixin(object):
         sff = _np.mean(_np.abs(sfflist)**2, axis=0)
         sff_uncon = _np.abs(_np.mean(sfflist, axis=0))**2
 
-        return taulist, sff, sff_uncon
+        self.taulist = taulist
+        self.sff_con = sff
+        self.sff_uncon = sff_uncon
+

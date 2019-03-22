@@ -9,14 +9,63 @@ to be diminished.
 
 
 """
+
+
 import warnings as _warnings
 
+from future.utils import iteritems
 import numpy as np
 
 from . import tester_methods as _tst
 
 
-class Unfold_mixin(object):
+class Toggle_mixin(object):
+
+    def _toggle_states(self, level):
+        """
+
+
+        """
+        levels = {
+            1: [['_resizing_performed'],
+                ['_unfold_dict']],
+            2: [['_unfolding_performed',
+                 '_resizing_performed'],
+                ['_unfold_dict']
+                ],
+            3: [['_misc_calculated'],
+                ['_misc_dict']],
+            4: [['_filtering_performed'],
+                ['_filt_dict']],
+            5: [['_sff_calculated'],
+                ['sff_con',
+                 'sff_uncon',
+                 'taulist']]
+
+        }
+
+        vals = {
+            1: [None],
+            2: [None],
+            3: [None],
+            4: [None],
+            5: [np.ndarray([]),
+                np.ndarray([]),
+                np.ndarray([])]
+        }
+
+        for (key, values) in iteritems(levels):
+            if key > level:
+                for value in values[0]:
+                    setattr(self, value, False)
+                for i, value in enumerate(values[1]):
+                    setattr(self, value, vals[key][i])
+            else:
+                for value in values[0]:
+                    setattr(self, value, True)
+
+
+class Unfold_mixin(Toggle_mixin):
     """
     A "mixin" class which only contains
     methods but deliberately lacks an
@@ -253,14 +302,9 @@ class Unfold_mixin(object):
         # If unfolding of the spectrum is performed, make
         # sure that other quantities which are calculated
         # on the basis of the unfolded data are reset.
-        self._unfolding_performed = True
-        self._resizing_performed = True
-        self._misc_calculated = False
-        self._filtering_performed = False
 
         self._unfold_dict = unfold_dict
-        self._misc_dict = None
-        self._filter_dict = None
+        self._toggle_states(2)
 
     def spectral_resizing(self):
         """
@@ -276,10 +320,4 @@ class Unfold_mixin(object):
 
         self._spectrum = spectrum
 
-        self._resizing_performed = True
-        self._misc_calculated = False
-        self._filtering_performed = False
-
-        self._unfold_dict = None
-        self._misc_dict = None
-        self._filter_dict = None
+        self._toggle_states(1)

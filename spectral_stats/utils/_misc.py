@@ -175,11 +175,8 @@ class Misc_mixin(Unfold_mixin):
             for key in additional_keys:
                 misc_dict[key] = self._unfold_dict[key]
 
-        self._misc_calculated = True
-        self._filtering_performed = False
-
         self._misc_dict = misc_dict
-        self._filt_dict = None
+        self._toggle_states(3)
 
     @staticmethod
     def _spectral_filtering(spectra, filter_func, *args, **kwargs):
@@ -335,5 +332,5 @@ class Misc_mixin(Unfold_mixin):
         for (key, value) in iteritems(kwargs):
             filt_dict[key] = value
 
-        self._filtering_performed = True
         self._filt_dict = filt_dict
+        self._toggle_states(4)
