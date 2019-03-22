@@ -160,20 +160,18 @@ class Misc_mixin(Unfold_mixin):
         misc_dict = self._ham_misc(self.spectrum,
                                    individual)
 
-        misc_dict['unfolded'] = self._unfolding_performed
-        misc_dict['individual'] = individual
-        misc_dict['spectral_width'] = self.spectral_width
+        misc_dict['individual_misc'] = individual
 
-        if self._unfolding_performed:
-            # add extra data for the unfolded spectrum
-            # n - the degree of the fitting polynomial
-            # merged - if the unfolded spectra were
+        # if self._unfolding_performed:
+        #     # add extra data for the unfolded spectrum
+        #     # n - the degree of the fitting polynomial
+        #     # merged - if the unfolded spectra were
 
-            # previously merged (check the unfolding routines)
-            # correct_slope - if slope correction was used
-            additional_keys = ['n', 'merged', 'correct_slope']
-            for key in additional_keys:
-                misc_dict[key] = self._unfold_dict[key]
+        #     # previously merged (check the unfolding routines)
+        #     # correct_slope - if slope correction was used
+        #     additional_keys = ['n', 'merged', 'correct_slope']
+        #     for key in additional_keys:
+        #         misc_dict[key] = self._unfold_dict[key]
 
         self._misc_dict = misc_dict
         self._toggle_states(3)
@@ -324,9 +322,7 @@ class Misc_mixin(Unfold_mixin):
         for i, key in enumerate(dict_keys):
             filt_dict[key] = quantities[i]
 
-        filt_dict['unfolded'] = self._unfolding_performed
-        filt_dict['type'] = filter_key
-        filt_dict['spectral_width'] = self.spectral_width
+        filt_dict['filter_type'] = filter_key
 
         # additional dict entries parsed from kwargs dict
         for (key, value) in iteritems(kwargs):

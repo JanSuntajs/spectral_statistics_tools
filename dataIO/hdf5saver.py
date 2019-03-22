@@ -7,10 +7,11 @@ for structured filesaving and addition of metadata.
 
 from future.utils import iteritems
 import h5py
+import json
 
 
 def hdf5save(filename, datasets,
-             attrs, *args, **kwargs):
+             attrs, metadata={}, *args, **kwargs):
     """
 
     Parameters
@@ -20,6 +21,11 @@ def hdf5save(filename, datasets,
                 the .hdf5 suffix specifying
                 the name under which the
                 hdf5 file will be saved.
+    groupname: string
+                Name string specifying
+                the name of the basegroup
+                for which the datasets are
+                created.
     datasets: dict
                 A dict of key and
                 value pairs where keys
@@ -28,16 +34,12 @@ def hdf5save(filename, datasets,
                 numerical values, prefferably
                 in the numpy array format.
     attrs: dict
-                A (nested) dist of key and
-                value pairs; keys of the
-                attrs dict should be a subset
-                of the datasets' keys. The values
-                are dictionaries of values which
-                should be appended as datasets'
-                attributes. Large arrays should
-                preferably not be appended as
-                attributes but rather as
-                datasets.
+                A dict of key and
+                value pairs which provide
+                additional information about
+                the saved datasets. These are
+                appended as the attributes of
+                the whole group.
 
 
 
@@ -52,8 +54,24 @@ def hdf5save(filename, datasets,
 
         for (key, value) in iteritems(datasets):
             f.create_dataset(key, data=value)
-            try:
-                f[key].attrs.update(attrs[key])
-            except KeyError:
-                print(("Key {} in attrs "
-                       "dict missing!").format(key))
+
+        # add metadata
+        f.create_dataset('misc',
+                         data=json.dumps(attrs))
+
+        f.create_dataset('metadata', data=json.dumps(metadata))
+
+
+def hdf5load(filename):
+
+    filename = filename.strip() + '.hdf5'
+
+    return_dict = {}
+    with h5py.File(filename, 'r') as f:
+        for key in f.keys():
+            if key not in ['misc', 'metadata']:
+                return_dict[key] = f[key][:]
+            else:
+                return_dict[key] = json.loads(f[key][()])
+
+    return return_dict

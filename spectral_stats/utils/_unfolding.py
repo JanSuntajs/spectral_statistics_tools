@@ -291,13 +291,14 @@ class Unfold_mixin(Toggle_mixin):
 
         self._spectrum = unfolded
 
+        unfold_dict['unfolding_performed'] = self._unfolding_performed
         unfold_dict['n'] = n
-        unfold_dict['merged'] = merge
+        unfold_dict['merged_unfolding'] = merge
         unfold_dict['correct_slope'] = correct_slope
         unfold_dict['spectral_width'] = self.spectral_width
         #  how many values were discarded during
         #  procedure due to slope correction
-        unfold_dict['discarded'] = discarded
+        unfold_dict['discarded_unfolding'] = discarded
 
         # If unfolding of the spectrum is performed, make
         # sure that other quantities which are calculated
