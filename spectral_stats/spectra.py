@@ -125,17 +125,26 @@ class Spectra(Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
     def __init__(self, spectrum, *args, **kwargs):
         super(Spectra, self).__init__()
 
+        # control variables
         self._unfolding_performed = False
         self._misc_calculated = False
         self._resizing_performed = False
         self._filtering_performed = False
+        self._sff_calculated = False
+
+        # unfolding, misc, filtering
         self._unfold_dict = None
         self._misc_dict = None
         self._filt_dict = None
+
+        # sff
+        self.taulist = _np.ndarray([])
+        self.sff_con = _np.ndarray([])
+        self.sff_uncon = _np.ndarray([])
+
+        # defaults
         self.spectral_width = (0., 1.)
         self._spectrum0 = spectrum
-        # self._spectrum = _np.zeros_like(spectrum,
-        #                                 dtype=_np.float64)
 
     @property
     def spectral_width(self):
