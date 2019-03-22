@@ -5,7 +5,7 @@ from . import _sff_functions as _sff
 
 class Sff_mixin(object):
 
-    def sff(self, taulist):
+    def calc_sff(self, taulist):
 
         try:
             weights = self._filt_dict['filter']

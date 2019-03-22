@@ -401,9 +401,7 @@ class Spectra(Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
             'sff_uncon': self.sff_uncon,
             'taulist': self.taulist
         }
-        #'dims', 'dims_eff',
-        #'normal_con', 'normal_uncon'
-        #  prepare metadata attributes
+
         filt_exclude = ['filter', 'dims']
         filt_dict = dict((key, self.filt_dict[key])
                          for key in self.filt_dict if key not in filt_exclude)
@@ -411,11 +409,12 @@ class Spectra(Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
 
         misc_dict = dict((key, self.misc_dict[key])
                          for key in self.misc_dict if key not in misc_exclude)
-        misc0 = self.misc0.copy()
-        for key in misc0:
-            misc0[key + '0'] = misc0.pop[key]
+        misc0 = self.misc0_dict.copy()
+        misc0_keys = [key for key in misc0]
+        for key in misc0_keys:
+            misc0[key + '0'] = misc0.pop(key)
 
-        attrs = self.unfold_dict.copy()
+        attrs = self.unfold_dict
         for dict_ in (misc_dict, filt_dict, misc0):
             attrs.update(dict_)
 
