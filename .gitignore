@@ -187,5 +187,3 @@ sftp-config.json
 #numerical data
 *.hdf5
 
-# data
-/example_data
