@@ -167,12 +167,6 @@ class Misc_mixin(Unfold_mixin):
         #     # n - the degree of the fitting polynomial
         #     # merged - if the unfolded spectra were
 
-        #     # previously merged (check the unfolding routines)
-        #     # correct_slope - if slope correction was used
-        #     additional_keys = ['n', 'merged', 'correct_slope']
-        #     for key in additional_keys:
-        #         misc_dict[key] = self._unfold_dict[key]
-
         self._misc_dict = misc_dict
         self._toggle_states(3)
 

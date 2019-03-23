@@ -21,11 +21,6 @@ def hdf5save(filename, datasets,
                 the .hdf5 suffix specifying
                 the name under which the
                 hdf5 file will be saved.
-    groupname: string
-                Name string specifying
-                the name of the basegroup
-                for which the datasets are
-                created.
     datasets: dict
                 A dict of key and
                 value pairs where keys
@@ -40,8 +35,6 @@ def hdf5save(filename, datasets,
                 the saved datasets. These are
                 appended as the attributes of
                 the whole group.
-
-
 
     Returns
     -------
@@ -75,3 +68,4 @@ def hdf5load(filename):
                 return_dict[key] = json.loads(f[key][()])
 
     return return_dict
+

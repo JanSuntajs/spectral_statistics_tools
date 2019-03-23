@@ -31,7 +31,6 @@ IT IS INCONSISTENT AND INCOMPLETE
 from collections import defaultdict
 
 import numpy as _np
-import json
 import os
 import time
 
