@@ -11,7 +11,8 @@ import json
 
 
 def hdf5save(filename, datasets,
-             attrs, metadata={}, *args, **kwargs):
+             attrs, metadata={}, system_info={},
+             *args, **kwargs):
     """
 
     Parameters
@@ -39,7 +40,13 @@ def hdf5save(filename, datasets,
     Returns
     -------
 
-
+    hdf5 file with:
+        - datasets, which are accesed as
+        f[key] where key is a key in the
+        dataset dict
+        Additional datasets are:
+        - 'metadata', 'misc' and
+        'system_info'
     """
 
     filename = filename.strip() + '.hdf5'
@@ -48,11 +55,17 @@ def hdf5save(filename, datasets,
         for (key, value) in iteritems(datasets):
             f.create_dataset(key, data=value)
 
-        # add metadata
+        # add additional info about the
+        # numerical procedure
         f.create_dataset('misc',
                          data=json.dumps(attrs))
 
+        # add metadata
         f.create_dataset('metadata', data=json.dumps(metadata))
+
+        # add info about the (physical) system
+        f.create_dataset('system_info',
+                         data=json.dumps(system_info))
 
 
 def hdf5load(filename):
@@ -68,4 +81,3 @@ def hdf5load(filename):
                 return_dict[key] = json.loads(f[key][()])
 
     return return_dict
-

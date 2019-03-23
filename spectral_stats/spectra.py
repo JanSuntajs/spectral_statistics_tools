@@ -375,7 +375,7 @@ class Spectra(Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
 
         return hist, edges
 
-    def save(self, filename, metadata=metadata,
+    def save(self, filename, metadata=metadata, system_info={},
              *args, **kwargs):
         """
         A function for saving data in the HDF5
@@ -420,4 +420,4 @@ class Spectra(Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
                       'nener0': self._nener, 'nsamples0': self._nsamples})
 
         print(attrs)
-        hdf5save(filename, datasets, attrs, metadata)
+        hdf5save(filename, datasets, attrs, metadata, system_info)
