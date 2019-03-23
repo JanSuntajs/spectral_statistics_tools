@@ -289,10 +289,9 @@ class Spectra(Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
                 self.spectral_width)
 
             self._resizing_performed = True
-            return spectra
+            self._spectrum = spectra
 
-        else:
-            return self._spectrum
+        return self._spectrum
 
     @property
     def _nener(self):
