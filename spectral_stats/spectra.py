@@ -283,7 +283,7 @@ class Spectra(Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
     @property
     def spectrum(self):
 
-        if (not self._unfolding_performed):
+        if (not self._resizing_performed):
             spectra, nsamples, nener = _tst._resize_spectra(
                 self._spectrum0,
                 self.spectral_width)
