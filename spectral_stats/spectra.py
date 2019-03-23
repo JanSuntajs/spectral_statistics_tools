@@ -223,9 +223,9 @@ class Spectra(Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
         self._sff_calculated = False
 
         # unfolding, misc, filtering
-        self._unfold_dict = None
-        self._misc_dict = None
-        self._filt_dict = None
+        self._unfold_dict = {}
+        self._misc_dict = {}
+        self._filt_dict = {}
 
         # sff
         self.taulist = _np.ndarray([])

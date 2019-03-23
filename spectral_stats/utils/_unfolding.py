@@ -45,10 +45,10 @@ class Toggle_mixin(object):
         }
 
         vals = {
-            1: [None],
-            2: [None],
-            3: [None],
-            4: [None],
+            1: [{}],
+            2: [{}],
+            3: [{}],
+            4: [{}],
             5: [np.ndarray([]),
                 np.ndarray([]),
                 np.ndarray([])]
