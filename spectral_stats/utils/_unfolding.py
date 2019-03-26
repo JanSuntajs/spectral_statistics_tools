@@ -282,6 +282,7 @@ class Unfold_mixin(Toggle_mixin):
             n = 1
             unfolded = self._unfold_function(n, merge)
 
+        self._toggle_states(2)
         discarded = unfolded.shape[1]
 
         if correct_slope:
@@ -305,7 +306,6 @@ class Unfold_mixin(Toggle_mixin):
         # on the basis of the unfolded data are reset.
 
         self._unfold_dict = unfold_dict
-        self._toggle_states(2)
 
     def spectral_resizing(self):
         """

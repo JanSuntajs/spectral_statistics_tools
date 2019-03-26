@@ -412,7 +412,7 @@ class Spectra(Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
         for key in misc0_keys:
             misc0[key + '0'] = misc0.pop(key)
 
-        attrs = self.unfold_dict
+        attrs = self.unfold_dict.copy()
         for dict_ in (misc_dict, filt_dict, misc0):
             attrs.update(dict_)
 

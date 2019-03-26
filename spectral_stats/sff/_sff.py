@@ -24,3 +24,4 @@ class Sff_mixin(object):
         self.taulist = taulist
         self.sff = sff
         self.sff_uncon = sff_uncon
+        self._toggle_states(5)
