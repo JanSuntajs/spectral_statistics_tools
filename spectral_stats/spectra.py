@@ -77,6 +77,14 @@ taulist, which store the data about the tau parameter values, the sff\n
 which includes the so-called unconnected part, and the values of the\n
 unconnected sff part which one needs to subtract in order to obtain\n
 the connected spectral form factor.\n
+- lvals: 1D ndarray with energy values on which the number level\n
+variance is calculated. If level variance was not calculated, this\n
+is an empty ndarray.\n
+- lvl_var: 2D ndarray of shape (3, len(lvals)) or (6, len(lvals)).\n
+In the first case, the average number of levels in an energy interval\n
+is returned, then the mean number level variance and the variance\n
+of the mean level variance. In the second case, also the statistical\n
+errors due to averaging over different random samples are returned.\n
 
 Apart from these main quantities, there are also the 'misc' and\n
 'metadata' datasets. The 'misc' dataset contains the data related
@@ -403,7 +411,9 @@ class Spectra(Lvl_mixin, Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
             'filter': self.filt_dict['filter'],
             'sff': self.sff,
             'sff_uncon': self.sff_uncon,
-            'taulist': self.taulist
+            'taulist': self.taulist,
+            'lvals': self.lvals,
+            'lvl_var': self.lvl_var
         }
 
         filt_exclude = ['filter', 'dims']
