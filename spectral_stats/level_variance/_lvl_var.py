@@ -1,4 +1,4 @@
-import numpy as _np
+
 
 from . import lvl_var_functions as _lvl
 
@@ -24,14 +24,8 @@ class Lvl_mixin(object):
 
         """
 
-        #     = _lvl.sigma_averaged(
-        #         self.spectrum, lvals, deviation)
+        lvl_var = _lvl.sigma_averaged(self.spectrum, lvals, deviation)
 
-        # sff = _np.mean(_np.abs(sfflist)**2, axis=0)
-        # sff_uncon = _np.abs(_np.mean(sfflist, axis=0))**2
-
-        # self.taulist = taulist
-        # self.sff = sff
-        # self.sff_uncon = sff_uncon
-        # self._toggle_states(5)
-        pass
+        self.lvals = lvals
+        self.lvl_var = lvl_var
+        self._toggle_states(6)

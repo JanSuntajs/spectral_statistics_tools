@@ -38,6 +38,7 @@ from .nearest_levels._gap_ratios import Gap_mixin
 from .utils._unfolding import Unfold_mixin
 from .utils._misc import Misc_mixin
 from .sff._sff import Sff_mixin
+from .level_variance._lvl_var import Lvl_mixin
 from .utils import tester_methods as _tst
 from dataIO.hdf5saver import hdf5save
 
@@ -137,7 +138,7 @@ def _makehash():
     return defaultdict(_makehash)
 
 
-class Spectra(Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
+class Spectra(Lvl_mixin, Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
     """
     The spectrum object contains an ensemble of energy spectra on which
     various spectral statistics can be performed.
