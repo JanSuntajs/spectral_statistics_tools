@@ -23,9 +23,32 @@ class Toggle_mixin(object):
 
     def _toggle_states(self, level):
         """
-
+        A checking routine for toggling states
+        of the switches indicating whether
+        operations such as unfolding or
+        parameter calculations have been
+        performed.
 
         """
+
+        # levels dict:
+        # Each level key points to a 2D values
+        # list.
+        # levels[key][0] always refers to
+        # the switch indicating whether a
+        # certain operation, such as
+        # unfolding, has been performed.
+        # levels[key][1] refers to dictionaries
+        # or arrays which need to be reset
+        # to their default values if an action
+        # has been performed. For instance, if
+        # unfolding has been performed anew,
+        # all subsequent values (levels) are then
+        # reset to avoid possible conflicting results
+        # where one would, for instance, calculate
+        # spectral form factor with a non-matching
+        # combination of misc values and filters.
+        #
         levels = {
             1: [['_resizing_performed'],
                 ['_unfold_dict']],
@@ -40,10 +63,40 @@ class Toggle_mixin(object):
             5: [['_sff_calculated'],
                 ['sff_con',
                  'sff_uncon',
-                 'taulist']]
+                 'taulist']],
+            6: [['_lvl_var_calculated'],
+                ['lvals',
+                 'lvl_var']]
 
         }
 
+        # resets dict
+        # A dictionary which contains information
+        # about quantities (levels) that need to
+        # be reset after an operation has been
+        # performed. Unfolding, for instance,
+        # affects all subsequent calculations,
+        # while calculation of misc values and
+        # filtering only affect the sff calculations
+        # and not the level variance calculations.
+        # If 'all' is in resets[key], then all levels
+        # greater than the input parameter level are
+        # affected. If 'none' is in resets[key], then
+        # no levels are affected. In the remaining case,
+        # the list of numerical values specifies
+        # which particular levels are affected.
+        resets = {
+
+            1: ['all'],
+            2: ['all'],
+            3: [4, 5],
+            4: [5],
+            5: ['none'],
+            6: ['none']
+        }
+
+        # vals dict
+        # default values
         vals = {
             1: [{}],
             2: [{}],
@@ -51,18 +104,43 @@ class Toggle_mixin(object):
             4: [{}],
             5: [np.ndarray([]),
                 np.ndarray([]),
+                np.ndarray([])],
+            6: [np.ndarray([]),
                 np.ndarray([])]
         }
 
-        for (key, values) in iteritems(levels):
-            if key > level:
-                for value in values[0]:
-                    setattr(self, value, False)
-                for i, value in enumerate(values[1]):
-                    setattr(self, value, vals[key][i])
-            else:
-                for value in values[0]:
-                    setattr(self, value, True)
+        # this gives a list of levels which
+        # are affected by the operation
+        reset = resets[level]
+        if 'all' in reset:
+            # all keys greater than the level
+            keys = [key for key in levels.keys() if key > level]
+        elif 'none' in reset:
+            # nothing is affected
+            keys = []
+        else:
+            # the numerical values
+            keys = reset
+
+        # first set the switch of the chosen
+        # level to true
+        values = levels[level]
+
+        for value in values[0]:
+            setattr(self, value, True)
+
+        for key in keys:
+
+            values = levels[key]
+
+            # set switches of the higher levels
+            # to false
+            for value in values[0]:
+                settatr(self, value, False)
+            # set values of the higher levels
+            # to their default values
+            for i, value in enumerate(values[1]):
+                setattr(self, value, vals[key][i])
 
 
 class Unfold_mixin(Toggle_mixin):

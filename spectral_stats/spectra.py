@@ -221,6 +221,7 @@ class Spectra(Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
         self._resizing_performed = False
         self._filtering_performed = False
         self._sff_calculated = False
+        self._lvl_var_calculated = False
 
         # unfolding, misc, filtering
         self._unfold_dict = {}
@@ -231,6 +232,10 @@ class Spectra(Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
         self.taulist = _np.ndarray([])
         self.sff = _np.ndarray([])
         self.sff_uncon = _np.ndarray([])
+
+        # lvl_variance
+        self.lvl_var = _np.ndarray([])
+        self.lvals = _np.ndarray([])
 
         # defaults
         self.spectral_width = (0., 1.)
