@@ -24,7 +24,7 @@ class Lvl_mixin(object):
 
         """
 
-        lvl_var = _lvl.sigma_averaged(self.spectrum, lvals, deviation)
+        lvl_var = _lvl.sigma_averaged(lvals, self.spectrum, deviation)
 
         self.lvals = lvals
         self.lvl_var = lvl_var
