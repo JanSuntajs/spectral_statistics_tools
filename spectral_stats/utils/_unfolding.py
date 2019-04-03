@@ -136,7 +136,7 @@ class Toggle_mixin(object):
             # set switches of the higher levels
             # to false
             for value in values[0]:
-                settatr(self, value, False)
+                setattr(self, value, False)
             # set values of the higher levels
             # to their default values
             for i, value in enumerate(values[1]):
