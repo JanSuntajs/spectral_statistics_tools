@@ -8,6 +8,8 @@ for structured filesaving and addition of metadata.
 from future.utils import iteritems
 import h5py
 import json
+import numpy as _np
+
 
 # special datasets are supposed to be stored as
 # dicts using json.dumps
@@ -78,14 +80,14 @@ def hdf5names(filename):
     of the hdf5 files' datasets.
     """
     try:
-        with h5py.File(filename, 'w') as f:
+        with h5py.File(filename, 'r') as f:
             for key in f.keys():
                 print(key)
     except OSError:
         print('{} not present!'.format(filename))
 
 
-def hdf5load(filename, partial=False, keys={}, *args, **kwargs):
+def hdf5load(filename, partial=False, keys=[], *args, **kwargs):
     """
 
     Parameters
