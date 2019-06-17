@@ -79,6 +79,8 @@ def hdf5names(filename):
     A routine that returns a dictionary
     of the hdf5 files' datasets.
     """
+
+    filename = filename.strip('.hdf5') + '.hdf5'
     try:
         with h5py.File(filename, 'r') as f:
             for key in f.keys():
