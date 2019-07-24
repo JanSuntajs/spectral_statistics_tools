@@ -136,7 +136,7 @@ def sigma_loop(L, E):
 
 
 @nb.jit('float64[:,:](float64[:], float64[:,:], b1)',
-        fastmath=True)
+        fastmath=True, forceobj=True)
 def sigma_averaged(L, E, deviation=False):
     """
     A function that averages different sigma loop
