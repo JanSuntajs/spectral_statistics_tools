@@ -10,5 +10,6 @@ setup(name='spectral_statistics_tools',
       license='MIT',
       packages=find_packages(),
       install_requires=['numpy', 'scipy',
-                        'numba', 'future', 'h5py'],
+                        'numba', 'future', 'h5py',
+                        'pandas'],
       zip_safe=False)
