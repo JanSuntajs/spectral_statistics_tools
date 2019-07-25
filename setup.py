@@ -9,4 +9,6 @@ setup(name='spectral_statistics_tools',
       author_email='Jan.Suntajs@ijs.si',
       license='MIT',
       packages=find_packages(),
+      install_requires=['numpy', 'scipy',
+                        'numba', 'future', 'h5py', 'json'],
       zip_safe=False)
