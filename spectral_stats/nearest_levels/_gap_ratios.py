@@ -158,3 +158,65 @@ class Gap_mixin(object):
         gap_dev = np.std(ratiolist)
 
         return gap_mean, gap_dev
+
+    def gap_hist(self, bins, hist_range=(0., 1.), density=True,
+                 **kwargs):
+        """
+        A function for calculating the histogram
+        of r-values averaged over different spectra.
+        NOTE: since the numpy.hist function is used
+        to produce the histogram, consult also the
+        reference manual for that particular function:
+        https://numpy.org/doc/stable/reference/generated/numpy.histogram.html
+
+        Parameters
+        ----------
+
+        bins: If bins is an int, it defines the number of
+        equal-width bins in the given range (10, by default).
+        If bins is a sequence, it defines a monotonically
+        increasing array of bin edges, including the rightmost edge,
+        allowing for non-uniform bin widths.
+
+        hist_range: (float, float), optional
+        The lower and upper range of the bins. If not provided,
+        range is simply (a.min(), a.max()) where a is the data
+        array considered. Values outside the range
+        are ignored. The first element of the range must be less than
+        or equal to the second. range affects the automatic bin computation
+        as well. While bin width is computed to be optimal based on the actual
+        data within range, the bin count will fill the entire range including
+        portions containing no data.
+
+        density: bool, optional
+        If False, the result will contain the number
+        of samples in each bin. If True, the result
+        is the value of the probability density function
+        at the bin, normalized such that the integral over
+        the range is 1. Note that the sum of the histogram
+        values will not be equal to 1 unless bins of unity
+        width are chosen; it is not a probability mass function.
+
+        Returns
+        -------
+        hist_vals: array
+        The (averaged) values of the histogram.
+
+        edges: array of dtype float
+        Returns the bing edges. (length(hist) + 1)
+
+        """
+
+        hist_vals = np.zeros((self.nsamples, bins), dtype=np.float)
+
+        for i, spectrum in self._spectrum0:
+
+            ratios = _calc_gaps(spectrum, self.spectral_width)[0]
+            hist, edges = np.histogram(
+                ratios, bins=bins, range=hist_range, density=density,
+                **kwargs)
+            hist_vals[i] = hist
+
+        hist_vals = np.mean(hist_vals, axis=0)
+
+        return hist_vals, edges
