@@ -209,7 +209,7 @@ class Gap_mixin(object):
 
         hist_vals = np.zeros((self.nsamples, bins), dtype=np.float)
 
-        for i, spectrum in self._spectrum0:
+        for i, spectrum in enumerate(self._spectrum0):
 
             ratios = _calc_gaps(spectrum, self.spectral_width)[0]
             hist, edges = np.histogram(
