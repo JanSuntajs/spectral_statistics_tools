@@ -194,3 +194,4 @@ class Gap_mixin(object):
 
 
         return ratiolist
+
