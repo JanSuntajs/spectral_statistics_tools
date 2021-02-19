@@ -436,4 +436,4 @@ class Spectra(Lvl_mixin, Sff_mixin, Misc_mixin, Unfold_mixin, Gap_mixin):
                       'nener0': self._nener, 'nsamples0': self._nsamples})
 
         print(attrs)
-        hdf5save(filename, datasets, attrs, metadata, system_info)
+        # hdf5save(filename, datasets, attrs, metadata, system_info)
