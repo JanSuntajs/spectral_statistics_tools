@@ -15,7 +15,7 @@ from ..utils import tester_methods as _tst
 def _gaps_numba(gaps):
     ratios = np.ones(shape=len(gaps) - 1, dtype=np.float64)
     for i in nb.prange(len(gaps[:-1])):
-        pair = gaps[i:i + 2]
+        pair = np.array([gaps[i], gaps[i + 1]], dtype=np.float64)
         ratios[i] = np.min(pair) / np.max(pair)
 
     return ratios
@@ -140,7 +140,7 @@ class Gap_mixin(object):
         gap_dev:  float
                     Statistical deviation of the calculated
                     gap mean.
-        
+
         ratiolist: ndarray
                     A ndarray of type float returning the mean
                     ratio for each individual sample. Only returned
@@ -170,7 +170,6 @@ class Gap_mixin(object):
         else:
             return gap_mean, gap_dev
 
-
     def gap_dist(self,
                  **kwargs):
         """
@@ -192,6 +191,4 @@ class Gap_mixin(object):
 
         ratiolist = ratiolist.flatten()
 
-
         return ratiolist
-
