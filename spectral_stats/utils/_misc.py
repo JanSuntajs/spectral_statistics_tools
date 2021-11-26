@@ -31,7 +31,6 @@ A subclass needs to the following attributes:
                                                   int(up * self.nener)]
 
 """
-from future.utils import iteritems
 
 import numpy as np
 
@@ -319,7 +318,7 @@ class Misc_mixin(Unfold_mixin):
         filt_dict['filter_type'] = filter_key
 
         # additional dict entries parsed from kwargs dict
-        for (key, value) in iteritems(kwargs):
+        for (key, value) in kwargs.items():
             filt_dict[key] = value
 
         self._filt_dict = filt_dict
