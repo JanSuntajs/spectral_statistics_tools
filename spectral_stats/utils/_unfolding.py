@@ -12,8 +12,6 @@ to be diminished.
 
 
 import warnings as _warnings
-
-from future.utils import iteritems
 import numpy as np
 
 from . import tester_methods as _tst
